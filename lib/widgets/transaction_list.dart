@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/modelos/transaccion.dart';
-import 'package:flutter_complete_guide/widgets/user_transactions.dart';
 import 'package:intl/intl.dart';
 
 class ListaTransaccion extends StatelessWidget {
@@ -19,7 +18,7 @@ class ListaTransaccion extends StatelessWidget {
               children: <Widget>[
                 Container(
                   child: Text(
-                    "\$${transacciones[posicion].cantidad}",
+                    "\$${transacciones[posicion].cantidad.toStringAsFixed(2)}",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
