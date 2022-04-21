@@ -11,7 +11,25 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter App',
+      title: 'Gastos personales',
+      theme: ThemeData(
+        primarySwatch: Colors.purple,
+        accentColor: Colors.amber,
+        fontFamily: "Quicksand",
+        textTheme: ThemeData.light().textTheme.copyWith(
+              headline6: TextStyle(
+                fontFamily: "OpenSans",
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+        appBarTheme: AppBarTheme(
+          titleTextStyle: TextStyle(
+              fontFamily: 'OpenSans',
+              fontSize: 20,
+              fontWeight: FontWeight.bold),
+        ),
+      ),
       home: MyHomePage(),
     );
   }
@@ -24,18 +42,18 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaccion> _transacciones = [
-    Transaccion(
-      id: "t1",
-      titulo: "Zapatos nuevos",
-      cantidad: 69.99,
-      fecha: DateTime.now(),
-    ),
-    Transaccion(
-      id: "t2",
-      titulo: "Compra semanal",
-      cantidad: 16.53,
-      fecha: DateTime.now(),
-    ),
+    // Transaccion(
+    //   id: "t1",
+    //   titulo: "Zapatos nuevos",
+    //   cantidad: 69.99,
+    //   fecha: DateTime.now(),
+    // ),
+    // Transaccion(
+    //   id: "t2",
+    //   titulo: "Compra semanal",
+    //   cantidad: 16.53,
+    //   fecha: DateTime.now(),
+    // ),
   ];
 
   void _insertarTransaccion(String titulo, double cantidad) {
@@ -67,7 +85,9 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Flutter App'),
+        title: Text(
+          'Gastos personales',
+        ),
         actions: [
           IconButton(
             icon: Icon(Icons.add),
