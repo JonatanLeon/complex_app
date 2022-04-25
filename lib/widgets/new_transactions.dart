@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class NuevaTransaccion extends StatefulWidget {
   final Function insertarTr;
@@ -11,8 +12,8 @@ class NuevaTransaccion extends StatefulWidget {
 
 class _NuevaTransaccionState extends State<NuevaTransaccion> {
   final titleController = TextEditingController();
-
   final amountController = TextEditingController();
+  DateTime fechaSeleccionada;
 
   void aceptarDatos() {
     final tituloIntroducido = titleController.text;
@@ -28,6 +29,22 @@ class _NuevaTransaccionState extends State<NuevaTransaccion> {
     );
 
     Navigator.of(context).pop();
+  }
+
+  void elegirFechas() {
+    showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2019),
+      lastDate: DateTime.now(),
+    ).then((fecha) {
+      if (fecha == null) {
+        return;
+      }
+      setState(() {
+        fechaSeleccionada = fecha;
+      });
+    });
   }
 
   @override
@@ -52,9 +69,32 @@ class _NuevaTransaccionState extends State<NuevaTransaccion> {
               onSubmitted: (_) => aceptarDatos(),
               //onChanged: (val) => amountInput = val,
             ),
-            FlatButton(
+            Container(
+              height: 70,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      fechaSeleccionada == null
+                          ? "No se ha elegido fecha"
+                          : "Fecha seleccionada: ${DateFormat.yMd().format(fechaSeleccionada)}",
+                    ),
+                  ),
+                  FlatButton(
+                    textColor: Theme.of(context).primaryColor,
+                    onPressed: elegirFechas,
+                    child: Text(
+                      "Elige fecha",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            RaisedButton(
               child: Text("Añadir transacción"),
-              textColor: Colors.purple,
+              color: Theme.of(context).primaryColor,
+              textColor: Theme.of(context).textTheme.button.color,
               onPressed: aceptarDatos,
             )
           ],
