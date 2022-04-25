@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_complete_guide/widgets/chart_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_complete_guide/modelos/transaccion.dart';
 
@@ -22,13 +23,16 @@ class Chart extends StatelessWidget {
         }
       }
 
-      print(DateFormat.E().format(diaSemana));
-      print(sumaTotal);
-
       return {
-        "dia": DateFormat.E().format(diaSemana),
+        "dia": DateFormat.E().format(diaSemana).substring(0, 1),
         "cantidad": sumaTotal,
       };
+    }).reversed.toList();
+  }
+
+  double get gastosTotales {
+    return groupedTransactionValues.fold(0.0, (suma, item) {
+      return suma + item["cantidad"];
     });
   }
 
@@ -38,8 +42,23 @@ class Chart extends StatelessWidget {
     return Card(
       elevation: 6,
       margin: EdgeInsets.all(20),
-      child: Row(
-        children: [],
+      child: Padding(
+        padding: EdgeInsets.all(10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: groupedTransactionValues.map((datos) {
+            return Flexible(
+              fit: FlexFit.tight,
+              child: ChartBar(
+                datos["dia"],
+                datos["cantidad"],
+                gastosTotales == 0.0
+                    ? 0.0
+                    : (datos["cantidad"] as double) / gastosTotales,
+              ),
+            );
+          }).toList(),
+        ),
       ),
     );
   }
