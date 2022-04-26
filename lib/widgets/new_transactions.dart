@@ -16,16 +16,20 @@ class _NuevaTransaccionState extends State<NuevaTransaccion> {
   DateTime fechaSeleccionada;
 
   void aceptarDatos() {
+    if (amountController.text.isEmpty) {
+      return;
+    }
     final tituloIntroducido = titleController.text;
     final cantidadIntroducida = double.parse(amountController.text);
 
-    if (tituloIntroducido.isEmpty || cantidadIntroducida <= 0) {
+    if (tituloIntroducido.isEmpty || cantidadIntroducida <= 0 || fechaSeleccionada == null) {
       return;
     }
 
     widget.insertarTr(
       tituloIntroducido,
       cantidadIntroducida,
+      fechaSeleccionada,
     );
 
     Navigator.of(context).pop();
