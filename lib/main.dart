@@ -69,7 +69,8 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
-  void _insertarTransaccion(String titulo, double cantidad, DateTime fechaElegida) {
+  void _insertarTransaccion(
+      String titulo, double cantidad, DateTime fechaElegida) {
     final nuevaTr = Transaccion(
       titulo: titulo,
       cantidad: cantidad,
@@ -104,25 +105,35 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Gastos personales',
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () => _startInsertarTransaccion(context),
-          ),
-        ],
+    final appBar = AppBar(
+      title: Text(
+        'Gastos personales',
       ),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.add),
+          onPressed: () => _startInsertarTransaccion(context),
+        ),
+      ],
+    );
+    return Scaffold(
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           //mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Chart(_transaccionesRecientes),
-            ListaTransaccion(_transacciones, _borrarTransaccion),
+            Container(
+              height: (MediaQuery.of(context).size.height -
+                      appBar.preferredSize.height - MediaQuery.of(context).padding.top) *
+                  0.3,
+              child: Chart(_transaccionesRecientes),
+            ),
+            Container(
+                height: (MediaQuery.of(context).size.height -
+                        appBar.preferredSize.height - MediaQuery.of(context).padding.top) *
+                    0.7,
+                child: ListaTransaccion(_transacciones, _borrarTransaccion)),
           ],
         ),
       ),
