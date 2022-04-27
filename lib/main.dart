@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_complete_guide/widgets/chart.dart';
 import 'package:flutter_complete_guide/widgets/new_transactions.dart';
 import 'package:flutter_complete_guide/widgets/transaction_list.dart';
@@ -6,7 +7,14 @@ import 'package:intl/intl.dart';
 
 import 'modelos/transaccion.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp,
+  //   DeviceOrientation.portraitDown,
+  // ]);
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -59,6 +67,8 @@ class _MyHomePageState extends State<MyHomePage> {
     // ),
   ];
 
+  bool showChart = false;
+
   List<Transaccion> get _transaccionesRecientes {
     return _transacciones.where((tr) {
       return tr.fecha.isAfter(
@@ -105,6 +115,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final isLandscape = mediaQuery.orientation == Orientation.landscape;
     final appBar = AppBar(
       title: Text(
         'Gastos personales',
@@ -116,6 +128,13 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ],
     );
+    final txListWidget = Container(
+      height: (mediaQuery.size.height -
+              appBar.preferredSize.height -
+              mediaQuery.padding.top) *
+          0.7,
+      child: ListaTransaccion(_transacciones, _borrarTransaccion),
+    );
     return Scaffold(
       appBar: appBar,
       body: SingleChildScrollView(
@@ -123,17 +142,39 @@ class _MyHomePageState extends State<MyHomePage> {
           //mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Container(
-              height: (MediaQuery.of(context).size.height -
-                      appBar.preferredSize.height - MediaQuery.of(context).padding.top) *
-                  0.3,
-              child: Chart(_transaccionesRecientes),
-            ),
-            Container(
-                height: (MediaQuery.of(context).size.height -
-                        appBar.preferredSize.height - MediaQuery.of(context).padding.top) *
-                    0.7,
-                child: ListaTransaccion(_transacciones, _borrarTransaccion)),
+            if (isLandscape)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Mostrar gráfica"),
+                  Switch(
+                    value: showChart,
+                    onChanged: (value) {
+                      setState(() {
+                        showChart = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            if (!isLandscape)
+              Container(
+                height: (mediaQuery.size.height -
+                        appBar.preferredSize.height -
+                        mediaQuery.padding.top) *
+                    0.3,
+                child: Chart(_transaccionesRecientes),
+              ),
+            if (!isLandscape) txListWidget,
+            if (isLandscape) showChart
+                  ? Container(
+                      height: (mediaQuery.size.height -
+                              appBar.preferredSize.height -
+                              mediaQuery.padding.top) *
+                          0.3,
+                      child: Chart(_transaccionesRecientes),
+                    )
+                  : txListWidget,
           ],
         ),
       ),

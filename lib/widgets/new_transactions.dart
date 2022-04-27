@@ -22,7 +22,9 @@ class _NuevaTransaccionState extends State<NuevaTransaccion> {
     final tituloIntroducido = titleController.text;
     final cantidadIntroducida = double.parse(amountController.text);
 
-    if (tituloIntroducido.isEmpty || cantidadIntroducida <= 0 || fechaSeleccionada == null) {
+    if (tituloIntroducido.isEmpty ||
+        cantidadIntroducida <= 0 ||
+        fechaSeleccionada == null) {
       return;
     }
 
@@ -53,55 +55,62 @@ class _NuevaTransaccionState extends State<NuevaTransaccion> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      child: Container(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            TextField(
-              decoration: InputDecoration(labelText: "Título"),
-              controller: titleController,
-              onSubmitted: (_) => aceptarDatos(),
-              //onChanged: (val) => titleInput = val,
-            ),
-            TextField(
-              decoration: InputDecoration(labelText: "Cantidad"),
-              controller: amountController,
-              keyboardType: TextInputType.number,
-              onSubmitted: (_) => aceptarDatos(),
-              //onChanged: (val) => amountInput = val,
-            ),
-            Container(
-              height: 70,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      fechaSeleccionada == null
-                          ? "No se ha elegido fecha"
-                          : "Fecha seleccionada: ${DateFormat.yMd().format(fechaSeleccionada)}",
-                    ),
-                  ),
-                  FlatButton(
-                    textColor: Theme.of(context).primaryColor,
-                    onPressed: elegirFechas,
-                    child: Text(
-                      "Elige fecha",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ],
+    return SingleChildScrollView(
+      child: Card(
+        elevation: 5,
+        child: Container(
+          padding: EdgeInsets.only(
+            top: 10,
+            left: 10,
+            right: 10,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 10,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              TextField(
+                decoration: InputDecoration(labelText: "Título"),
+                controller: titleController,
+                onSubmitted: (_) => aceptarDatos(),
+                //onChanged: (val) => titleInput = val,
               ),
-            ),
-            RaisedButton(
-              child: Text("Añadir transacción"),
-              color: Theme.of(context).primaryColor,
-              textColor: Theme.of(context).textTheme.button.color,
-              onPressed: aceptarDatos,
-            )
-          ],
+              TextField(
+                decoration: InputDecoration(labelText: "Cantidad"),
+                controller: amountController,
+                keyboardType: TextInputType.number,
+                onSubmitted: (_) => aceptarDatos(),
+                //onChanged: (val) => amountInput = val,
+              ),
+              Container(
+                height: 70,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        fechaSeleccionada == null
+                            ? "No se ha elegido fecha"
+                            : "Fecha seleccionada: ${DateFormat.yMd().format(fechaSeleccionada)}",
+                      ),
+                    ),
+                    FlatButton(
+                      textColor: Theme.of(context).primaryColor,
+                      onPressed: elegirFechas,
+                      child: Text(
+                        "Elige fecha",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              RaisedButton(
+                child: Text("Añadir transacción"),
+                color: Theme.of(context).primaryColor,
+                textColor: Theme.of(context).textTheme.button.color,
+                onPressed: aceptarDatos,
+              )
+            ],
+          ),
         ),
       ),
     );
